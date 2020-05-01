@@ -7,8 +7,9 @@ const bookInfo = [];
 router.post("/add_book", (req, res, next) => {
 
     const newTitle = req.body.new_book_title;
-    const newSummary = req.body.new_book_summary
-    bookInfo.push(newTitle, newSummary);
+    const newSummary = req.body.new_book_summary;
+    const book = {title: newTitle, summary: newSummary}
+    bookInfo.push(book);
 
     //one way of doing it
     //bookInfo.push(newTitle);

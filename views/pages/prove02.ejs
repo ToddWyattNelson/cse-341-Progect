@@ -25,7 +25,8 @@
 
     <div class="grid-container">
     <% for(bookInfo of bookInfos) { %>
-        <div class="item"><p><%= bookInfo %></p></div>
+
+        <div class="item"><p><%- bookInfo.title + "<br>" + bookInfo.summary %></p></div>
         <% } %>
     </div>
 </body>
