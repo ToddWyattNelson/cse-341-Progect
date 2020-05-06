@@ -1,21 +1,46 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <% include ../includes/header.ejs %>
 </head>
 
 <body>
   <% include ../includes/nav.ejs %>
-<div class="jumbotron text-center">
-  <div class="container">
-    <h1><%= title %></h1>
-    <p>This is the placeholder for Team Activity 03</p>
+  <div class="jumbotron text-center">
+    <div class="container">
+      <h1><%= title %></h1>
+      <p>This is the placeholder for Team Activity 03</p>
+    </div>
   </div>
-</div>
-<div class="container">
-  
-</div>
+  <form action="ta03/search-item" method="POST">
+    <input type="text" name="search" id="search" placeholder="item">
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="container">
+    <% data.forEach(element => { %>
+    <div id=team03>
+      <h1>
+        <%= element.tags %>
+      </h1>
+      <img src="<%= element.imageUrl %>" alt="element.tags">
+      <h2>
+        <%= element.price %>
+      </h2>
+      <h2>
+        <%= element.name %>
+      </h2>
+      <p>
+        <%= element.description %>
+      </p>
+    </div>
+    <% }); %>
+
+
+  </div>
 
 
 </body>
+
 </html>
