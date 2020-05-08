@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../../../includes/header.ejs %>
+    <link rel="stylesheet" href="/stylesheets/prove03Style/book_details_style.css">
+</head>
+
+<body>
+    <% include ../../../includes/nav.ejs %>
+
+    <div class="center">
+        <h1><%= Title %></h1>
+    </div>
+    <a class="return" href="../book-details">return</a>
+    <div>
+        <div class="grid_container">
+
+            
+            <div class="grid_item">
+                <a href="/<%= book.id %>">
+                    <h1>
+                        ID: <%= book.id %>
+                    </h1>
+                    <h1>
+                        <%= book.title %>
+                    </h1>
+                    <img src="<%= book.imageUrl %>" alt="book.imageUrl">
+                    <h2>
+                        Price: <%= book.price %>
+                    </h2>
+                    <p>
+                        Description:
+                        <%= book.description %>
+                    </p>
+                </a>
+            </div>
+            
+
+        </div>
+    </div>

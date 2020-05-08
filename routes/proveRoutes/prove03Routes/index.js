@@ -1,3 +1,3 @@
 const routes = require('express').Router();
-routes.use('/prove03', require('./prove03'))
+routes.use('/prove03R', require('./prove03R'))
 module.exports = routes;

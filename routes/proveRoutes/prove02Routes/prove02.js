@@ -14,7 +14,7 @@ router.post("/add_book", (req, res, next) => {
     //one way of doing it
     //bookInfo.push(newTitle);
     //bookSummary.push(newSummary);
-    res.redirect('/proveAssignments/prove02Routes/prove02');
+    res.redirect('/proveRoutes/prove02Routes/prove02');
 });
 
 

@@ -1,10 +1,10 @@
 const routes = require('express').Router();
-const teamActivities = require('./teamRoutes');
-const proveActivities = require('./proveRoutes');
+const teamRoutes = require('./teamRoutes');
+const proveRoutes = require('./proveRoutes');
 
 routes
-    .use('/teamActivities', teamActivities)
-    .use('/proveAssignments', proveActivities)
+    .use('/teamRoutes', teamRoutes)
+    .use('/proveRoutes', proveRoutes)
 
     .get('/', (req, res, next) => {
         // This is the primary index, always handled last. 
