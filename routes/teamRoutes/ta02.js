@@ -9,7 +9,7 @@ router.post("/addUser", (req, res, next) => {
 
     const newUser = req.body.user_name;
     users.push(newUser);
-    res.redirect('/ta02');
+    res.redirect('/teamActivities/ta02');
 });
 
 router.post("/removeUser", (req, res, next) =>{
@@ -20,11 +20,11 @@ router.post("/removeUser", (req, res, next) =>{
     if (index !== -1 ) {
         users.splice(index, 1);
     }
-    res.redirect('/ta02/');
+    res.redirect('/teamActivities/ta02');
 });
 
 router.get('/',(req, res, next) => {
-    res.render('pages/ta02', { 
+    res.render('pages/TeamAssignments/ta02', { 
         users: users,
         title: 'Team Activity 02', 
         path: '/ta02', // For pug, EJS 

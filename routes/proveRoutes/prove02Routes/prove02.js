@@ -14,13 +14,13 @@ router.post("/add_book", (req, res, next) => {
     //one way of doing it
     //bookInfo.push(newTitle);
     //bookSummary.push(newSummary);
-    res.redirect('/prove02');
+    res.redirect('/proveAssignments/prove02Routes/prove02');
 });
 
 
 
 router.get('/',(req, res, next) => {
-    res.render('pages/prove02', { 
+    res.render('pages/proveAssignments/prove02view/prove02', { 
         bookInfos: bookInfo,
         //bookSummarys: bookSummary,
         title: 'Prove02', 

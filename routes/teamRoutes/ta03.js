@@ -18,7 +18,8 @@ router.get('/', (req, res, next) => {
 
             const parsedData = JSON.parse(Buffer.concat(data).toString());
             console.log(parsedData);
-            res.render('pages/ta03', {
+            //todo 
+            res.render('pages/teamAssignments/ta03', {
                 title: 'Team Activity 03',
                 path: '/ta03', // For pug, EJS 
                 activeTA03: true, // For HBS

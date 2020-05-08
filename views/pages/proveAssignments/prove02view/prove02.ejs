@@ -2,19 +2,19 @@
 <html lang="en">
 
 <head>
-    <% include ../includes/header.ejs %>
+    <% include ../../../includes/header.ejs %>
     <link rel="stylesheet" href="/stylesheets/prove02Style.css">
 </head>
 
 <body>
-   <% include ../includes/nav.ejs %>
+   <% include ../../../includes/nav.ejs %>
 
     <div class="center">
         <h1><%= title %></h1>
     </div>
 
     <div>
-        <form action="/prove02/add_book" method="post" class="center">
+        <form action="prove02/add_book" method="post" class="center">
             <label for="new_title">Title</label>
             <input type="text" id="new_title" name="new_book_title" placeholder="Title">
             <label for="new_summary">Summary</label>
