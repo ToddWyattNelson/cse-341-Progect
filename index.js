@@ -14,10 +14,29 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors') // Place this with other requires (like 'path' and 'express')
 const PORT = process.env.PORT || 5000 // So we can run on heroku || (OR) localhost:5000
+
+const mongoose = require("mongoose");
 
 const app = express();
 const routes = require('./routes');
+
+const corsOptions = {
+  origin: "https://arcane-earth-73349.herokuapp.com/",
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
+
+const options = {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  family: 4
+};
+
+const MONGODB_URL = process.env.MONGODB_URL || "mongodb+srv://<username>:<username>@cse341cluster-3dwlw.mongodb.net/test?retryWrites=true&w=majority";
 
 // Route setup. You can implement more in the future!
 //for team assignments
@@ -36,26 +55,38 @@ app.use(express.static(path.join(__dirname, 'public')))
   .use(bodyParser({ extended: false }))
   .use('/', routes)
 
-  // For view engine as Pug
-  //.set('view engine', 'pug') // For view engine as PUG. 
-  // For view engine as hbs (Handlebars)
-  //.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout', extname: 'hbs'})) // For handlebars
-  //.set('view engine', 'hbs')
-  // For parsing the body of a POST
-  //for team assignments
-  //  .use('/ta01', ta01Routes)
-  //  .use('/ta02', ta02Routes) 
-  //  .use('/ta03', ta03Routes) 
-  //  .use('/ta04', ta04Routes)
-  //for prove assignments
-  //  .use('/prove02', prove02Assignment)
-  //.use('/prove03', prove03Assignment)
-  //  .get('/', (req, res, next) => {
-  //    // This is the primary index, always handled last. 
-  //    res.render('pages/index', {title: 'Welcome to my CSE341 repo', path: '/'});
-  //   })
-  //  .use((req, res, next) => {
-  //    // 404 page
-  //    res.render('pages/404', {title: '404 - Page Not Found', path: req.url})
-  //  })
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+// For view engine as Pug
+//.set('view engine', 'pug') // For view engine as PUG. 
+// For view engine as hbs (Handlebars)
+//.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout', extname: 'hbs'})) // For handlebars
+//.set('view engine', 'hbs')
+// For parsing the body of a POST
+//for team assignments
+//  .use('/ta01', ta01Routes)
+//  .use('/ta02', ta02Routes) 
+//  .use('/ta03', ta03Routes) 
+//  .use('/ta04', ta04Routes)
+//for prove assignments
+//  .use('/prove02', prove02Assignment)
+//.use('/prove03', prove03Assignment)
+//  .get('/', (req, res, next) => {
+//    // This is the primary index, always handled last. 
+//    res.render('pages/index', {title: 'Welcome to my CSE341 repo', path: '/'});
+//   })
+//  .use((req, res, next) => {
+//    // 404 page
+//    res.render('pages/404', {title: '404 - Page Not Found', path: req.url})
+//  })
+
+mongoose
+  .connect(
+    MONGODB_URL, options
+  )
+  .then(result => {
+    // This should be your user handling code implement following the course videos
+    app.listen(PORT);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
