@@ -36,7 +36,7 @@ const options = {
   family: 4
 };
 
-const MONGODB_URL = process.env.MONGODB_URL || "mongodb+srv://<username>:<username>@cse341cluster-3dwlw.mongodb.net/test?retryWrites=true&w=majority";
+const MONGODB_URL = process.env.MONGODB_URL || "mongodb+srv://CSE_341_users:Mceudc0XYM4dtof9@cluster0-xcgyf.mongodb.net/test?retryWrites=true&w=majority";
 
 // Route setup. You can implement more in the future!
 //for team assignments
