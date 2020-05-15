@@ -1,12 +1,12 @@
-body{
-    background-color: #2196F3;
+body {
+    background-color: #0065BD;
 }
 
-a.return{
-color: black;
-border: 1px #0065BD solid;
-padding: 10px 20px ;
-background-color: rgba(255, 255, 255, 0.8);
+a.return {
+    color: black;
+    border: 1px #0065BD solid;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .grid_container {
@@ -15,8 +15,8 @@ background-color: rgba(255, 255, 255, 0.8);
     width: 100%;
     justify-content: space-evenly;
     grid-gap: 10px;
-   
     padding: 10px;
+    
 }
 
 .grid_item {
@@ -24,5 +24,24 @@ background-color: rgba(255, 255, 255, 0.8);
     background-color: rgba(255, 255, 255, 0.8);
     text-align: center;
     padding: 20px 0;
+    border-radius: 10px;
     font-size: 30px;
+    transition-duration: 2s;
+}
+
+/* for fun */
+/* .grid_item:hover{
+    transform: rotate(360deg);
+    background-color: black;
+    color: white;
+} */
+
+img {
+    display: block;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 }

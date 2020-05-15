@@ -18,6 +18,7 @@ const cors = require('cors') // Place this with other requires (like 'path' and 
 const PORT = process.env.PORT || 5000 // So we can run on heroku || (OR) localhost:5000
 
 const mongoose = require("mongoose");
+const User = require("./models/prove03Models/user");
 
 const app = express();
 const routes = require('./routes');
@@ -36,18 +37,20 @@ const options = {
   family: 4
 };
 
-const MONGODB_URL = process.env.MONGODB_URL || "mongodb+srv://CSE_341_users:Mceudc0XYM4dtof9@cluster0-xcgyf.mongodb.net/test?retryWrites=true&w=majority";
+const MONGODB_URL = process.env.MONGODB_URL || "mongodb+srv://CSE_341_users:Mceudc0XYM4dtof9@cluster0-xcgyf.mongodb.net/Book_Store?retryWrites=true&w=majority";
 
-// Route setup. You can implement more in the future!
-//for team assignments
-// const ta01Routes = require('./routes/teamRoutes/ta01');
-// const ta02Routes = require('./routes/teamRoutes/ta02');
-// const ta03Routes = require('./routes/teamRoutes/ta03');
-// const ta04Routes = require('./routes/teamRoutes/ta04');
 
-// for prove assignments
-// const prove02Assignment = require('./routes/proveRoutes/prove02/prove02');
-// const prove03Assignment = require('./routes/proveRoutes/prove03/prove03');
+
+
+app.use((req, res, next) => {
+  User.findById('5ebd6e5e80a842057855a4ae')
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
+
 
 app.use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
@@ -55,34 +58,24 @@ app.use(express.static(path.join(__dirname, 'public')))
   .use(bodyParser({ extended: false }))
   .use('/', routes)
 
-// For view engine as Pug
-//.set('view engine', 'pug') // For view engine as PUG. 
-// For view engine as hbs (Handlebars)
-//.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout', extname: 'hbs'})) // For handlebars
-//.set('view engine', 'hbs')
-// For parsing the body of a POST
-//for team assignments
-//  .use('/ta01', ta01Routes)
-//  .use('/ta02', ta02Routes) 
-//  .use('/ta03', ta03Routes) 
-//  .use('/ta04', ta04Routes)
-//for prove assignments
-//  .use('/prove02', prove02Assignment)
-//.use('/prove03', prove03Assignment)
-//  .get('/', (req, res, next) => {
-//    // This is the primary index, always handled last. 
-//    res.render('pages/index', {title: 'Welcome to my CSE341 repo', path: '/'});
-//   })
-//  .use((req, res, next) => {
-//    // 404 page
-//    res.render('pages/404', {title: '404 - Page Not Found', path: req.url})
-//  })
 
 mongoose
   .connect(
     MONGODB_URL, options
   )
   .then(result => {
+    User.findOne().then(user => {
+      if (!user) {
+        const user = new User({
+          name: 'Wyatt Nelson',
+          email: 'nel12345@byui.edu',
+          cart: {
+            items: []
+          }
+        });
+        user.save();
+      }
+    });
     // This should be your user handling code implement following the course videos
     app.listen(PORT);
   })

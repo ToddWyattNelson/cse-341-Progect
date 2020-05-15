@@ -17,4 +17,25 @@ router.get('/book-details', prove03Controller.getBookDetails);
 //working on it
 router.get('/book-details/:id',prove03Controller.readBook);
 
+//admin tool
+router.get('/admin-tools', prove03Controller.getadminTools);
+
+//admin edit books
+router.get('/edit-book/:id', prove03Controller.adminEditBook);
+
+//admin editing book
+router.post('/edit-book/:id', prove03Controller.postEditBook);
+
+//admin delete book
+router.post('/delete-book', prove03Controller.postDeleteProduct);
+
+//look at the cart
+router.get('/cart', prove03Controller.getCart);
+
+//Add to cart
+router.post('/add-to-cart', prove03Controller.postAddToCart);
+
+// delete item from cart
+router.post("/cart-delete-item", prove03Controller.postDeleteItemFormCart);
+
 module.exports = router;

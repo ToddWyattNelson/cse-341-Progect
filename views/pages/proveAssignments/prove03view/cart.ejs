@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %> </title>
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/prove03Style/cart.css">
+
+</head>
+
+<body>
+    <!-- Title -->
+    <h1><%= pageTitle %></h1>
+    <!-- Return Button -->
+    <a class="return" href="../prove03R" class="btn btn-primary">return</a>
+
+
+
+
+
+   
+    <!-- items -->
+    <% if (books.length > 0) { %>
+    <% books.forEach( book => { %>
+
+
+    
+<div class="item">
+    <!-- Display info of book -->
+    <h1>Title: <%= book.title %></h1>
+    <img src="<%= book.imageUrl %>" alt="" class="img-thumbnail img-fluid">
+    <!-- Display Quantity-->
+    <h2>Quantity: <%=  book.quantity %></h2>
+    <!-- Delete Item from cart -->
+    <form action="./cart-delete-item" method="POST">
+        <input type="hidden" value="<%= book.bookId._id %>" name="bookId">
+        <button class="btn danger" type="submit">Delete</button>
+    </form>
+</div>
+    
+    <% }) %>
+    
+
+    <hr>
+    <div >
+        <form action="/create-order" method="POST" class="orderbutton">
+            <button id="orderButton" type="submit" class="btn">Order Now!</button>
+        </form>
+    </div>
+
+    <% } else { %>
+    <h1>No Products in Cart!</h1>
+    <% } %>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</body>

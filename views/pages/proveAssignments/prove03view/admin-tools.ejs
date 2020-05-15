@@ -22,18 +22,18 @@
                 <h1>
                     <%= element.title %>
                 </h1>
-                <div>
-                    <img src="<%= element.imageUrl %>" alt="element.imageUrl">
-                </div>
+                <img src="<%= element.imageUrl %>" alt="element.imageUrl">
                 <h3>
                     Price $: <%= element.price %>
                 </h3>
-                <a href="./book-details/<%= element.id %>"><button>details</button></a>
 
-                <form action="./add-to-cart" method="post">
-                    <button class="btn" type="submit">Add to Cart</button>
-                    <input type="hidden" name="bookId" value="<%= element._id %>">
+                <a href="/proveRoutes/prove03Routes/prove03R/edit-book/<%= element._id %>?edit=true" class="btn">Edit</a>
+
+                <form action="./delete-book" method="POST">
+                    <input type="hidden" value="<%= element._id %>" name="productId">
+                    <button class="btn" type="submit">Delete</button>
                 </form>
+
             </div>
             <% }); %>
 
