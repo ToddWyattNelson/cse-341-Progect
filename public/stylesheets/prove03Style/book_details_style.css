@@ -11,7 +11,8 @@ a.return {
 
 .grid_container {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: auto auto auto;
     width: 100%;
     justify-content: space-evenly;
     grid-gap: 10px;
@@ -23,10 +24,10 @@ a.return {
     border: 1px #0065BD solid;
     background-color: rgba(255, 255, 255, 0.8);
     text-align: center;
-    padding: 20px 0;
+    padding: 2vw 0;
     border-radius: 10px;
-    font-size: 30px;
-    transition-duration: 2s;
+    font-size: 1vw;
+    
 }
 
 /* for fun */
@@ -36,7 +37,7 @@ a.return {
     color: white;
 } */
 
-img {
+.book-img {
     display: block;
     border: 1px solid black;
     border-radius: 4px;

@@ -2,23 +2,21 @@
 <html lang="en">
 
 <head>
-    <% include ../../../includes/header.ejs %>
-    <link rel="stylesheet" href="/stylesheets/prove02Style.css">
+    <% include ../../../partials/prove03/shopnavStyle.ejs %>
+    <link rel="stylesheet" href="/stylesheets/prove03Style/buttons.css">
+    
+    <title>Document</title>
 </head>
 
 <body>
-    <% include ../../../includes/nav.ejs %>
+    <% include ../../../partials/prove03/shopnav.ejs %>
+    
+    <a  href="/"><button class="red small button ">Return to Home</button></a>
 
-    <div class="center">
-        <h1><%= Title %></h1>
+    <div class="content">
+
+        <h1>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui minus nemo amet illo reiciendis sequi corrupti
+            maxime in explicabo! Ea voluptate quaerat exercitationem eligendi magni nulla consequatur, fugiat magnam
+            molestiae.</h1>
     </div>
-    <ul>
-        <li><a href="/proveRoutes/prove03Routes/prove03R/add-book">Add book</a></li>
-        <li><a href="/proveRoutes/prove03Routes/prove03R/book-details">Catalogue</a></li>
-        <li><a href="/proveRoutes/prove03Routes/prove03R/Admin-tools">Admin Tools</a></li>
-        <li><a href="/proveRoutes/prove03Routes/prove03R/cart">Cart</a></li>
-        <li><a href="/proveRoutes/prove03Routes/prove03R/order">Order</a></li>
-
-    </ul>
-
 </body>

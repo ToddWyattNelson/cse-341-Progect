@@ -2,17 +2,18 @@
 <html lang="en">
 
 <head>
-    <% include ../../../includes/header.ejs %>
+    <% include ../../../partials/prove03/shopnavStyle.ejs %>
     <link rel="stylesheet" href="/stylesheets/prove03Style/book_details_style.css">
+    <link rel="stylesheet" href="/stylesheets/prove03Style/buttons.css">
 </head>
 
 <body>
-    <% include ../../../includes/nav.ejs %>
+    <% include ../../../partials/prove03/shopnav.ejs %>
 
     <div class="center">
         <h1><%= Title %></h1>
     </div>
-    <a class="return" href="../prove03R">return</a>
+    <a href="../prove03R"><button class="red small button">Return</button></a>
     <div>
         <div class="grid_container">
 
@@ -22,16 +23,16 @@
                 <h1>
                     <%= element.title %>
                 </h1>
-                <img src="<%= element.imageUrl %>" alt="element.imageUrl">
+                <img class="book-img" src="<%= element.imageUrl %>" alt="element.imageUrl">
                 <h3>
                     Price $: <%= element.price %>
                 </h3>
 
-                <a href="/proveRoutes/prove03Routes/prove03R/edit-book/<%= element._id %>?edit=true" class="btn">Edit</a>
+                <a href="/proveRoutes/prove03Routes/prove03R/edit-book/<%= element._id %>?edit=true" class="green small button">Edit</a>
 
                 <form action="./delete-book" method="POST">
                     <input type="hidden" value="<%= element._id %>" name="productId">
-                    <button class="btn" type="submit">Delete</button>
+                    <button class="red small button" type="submit">Delete</button>
                 </form>
 
             </div>

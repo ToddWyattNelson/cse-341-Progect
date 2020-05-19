@@ -2,17 +2,17 @@
 <html lang="en">
 
 <head>
-    <% include ../../../includes/header.ejs %>
+    <% include ../../../partials/prove03/shopnavStyle.ejs %>
     <link rel="stylesheet" href="/stylesheets/prove03Style/book_details_style.css">
+    <link rel="stylesheet" href="/stylesheets/prove03Style/buttons.css">
 </head>
 
 <body>
-    <% include ../../../includes/nav.ejs %>
-
+    <% include ../../../partials/prove03/shopnav.ejs %>
     <div class="center">
         <h1><%= Title %></h1>
     </div>
-    <a class="return" href="../book-details">return</a>
+    <a href="../book-details"><button class="red small button">Return</button></a>
     <div>
         <div class="grid_container">
 
@@ -23,7 +23,7 @@
                     <h1>
                         <%= book.title %>
                     </h1>
-                    <img src="<%= book.imageUrl %>" alt="book.imageUrl">
+                    <img class="book-img" src="<%= book.imageUrl %>" alt="book.imageUrl">
                     <h2>
                         Price: <%= book.price %>
                     </h2>

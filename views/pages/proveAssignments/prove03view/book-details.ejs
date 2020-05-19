@@ -2,17 +2,20 @@
 <html lang="en">
 
 <head>
-    <% include ../../../includes/header.ejs %>
+    <% include ../../../partials/prove03/shopnavStyle.ejs %>
+
     <link rel="stylesheet" href="/stylesheets/prove03Style/book_details_style.css">
+    <link rel="stylesheet" href="/stylesheets/prove03Style/buttons.css">
 </head>
 
 <body>
-    <% include ../../../includes/nav.ejs %>
+    <% include ../../../partials/prove03/shopnav.ejs %>
 
     <div class="center">
         <h1><%= Title %></h1>
     </div>
-    <a class="return" href="../prove03R">return</a>
+    <!-- Retrun Button -->
+    <a href="../prove03R"><button class="red small button">Return</button></a>
     <div>
         <div class="grid_container">
 
@@ -23,15 +26,15 @@
                     <%= element.title %>
                 </h1>
                 <div>
-                    <img src="<%= element.imageUrl %>" alt="element.imageUrl">
+                    <img class="book-img" src="<%= element.imageUrl %>" alt="element.imageUrl">
                 </div>
                 <h3>
                     Price $: <%= element.price %>
                 </h3>
-                <a href="./book-details/<%= element.id %>"><button>details</button></a>
+                <a href="./book-details/<%= element.id %>"><button class="green small button">details</button></a>
 
                 <form action="./add-to-cart" method="post">
-                    <button class="btn" type="submit">Add to Cart</button>
+                    <button class="blue small button" type="submit">Add to Cart</button>
                     <input type="hidden" name="bookId" value="<%= element._id %>">
                 </form>
             </div>
@@ -39,3 +42,6 @@
 
         </div>
     </div>
+    <a href="../prove03R"><button class="red small button">Return</button></a>
+    <br>
+</body>
