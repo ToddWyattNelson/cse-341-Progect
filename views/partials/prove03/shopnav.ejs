@@ -1,16 +1,32 @@
 <div class="backdrop">
     <header class='main'>
-       <a class="logolink"  href="/proveRoutes/prove03Routes/prove03R">
-        <img  class="logo" src="/images/logo_books.png" alt="Nelson's Books>"></a>
+        <a class="logolink" href="/proveRoutes/prove03Routes/prove03R">
+            <img class="logo" src="/images/logo_books.png" alt="Nelson's Books>"></a>
         <nav class="main-nav">
             <ul class="main-nav__item-list">
+
+                <li class="main-nav__item"><a href="/proveRoutes/prove03Routes/prove03R/book-details">Catalogue</a></li>
+                <% if (isAuthenticated) { %>
                 <li class="main-nav__item"><a href="/proveRoutes/prove03Routes/prove03R/add-book">Add book</a></li>
-                <li class="main-nav__item"><a href="/proveRoutes/prove03Routes/prove03R/book-details">Catalogue</a>
-                </li>
                 <li class="main-nav__item"><a href="/proveRoutes/prove03Routes/prove03R/Admin-tools">Admin Tools</a>
                 </li>
                 <li class="main-nav__item"><a href="/proveRoutes/prove03Routes/prove03R/cart">Cart</a></li>
                 <li class="main-nav__item"><a href="/proveRoutes/prove03Routes/prove03R/order">Order</a></li>
+                <% } %>
+            </ul>
+            <ul class="main-nav__item-list">
+                <% if (!isAuthenticated) { %>
+                <li class="main-nav__item"><a class="<%= path === '/login' ? 'active' : '' %>"
+                        href="/proveRoutes/prove03Routes/prove03R/login">Login</a></li>
+                <li class="main-nav__item"><a class="<%= path === '/signup' ? 'active' : '' %>"
+                        href="/proveRoutes/prove03Routes/prove03R/signup">Signup</a></li>
+                <% } else { %>
+                <li class="main-nav__item">
+                    <form action="/proveRoutes/prove03Routes/prove03R/logout" method="post">
+                        <button type="submit">Logout</button>
+                    </form>
+                </li>
+                <% } %>
             </ul>
         </nav>
     </header>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../../../partials/prove03/shopnavStyle.ejs %>
+    <link rel="stylesheet" href="/stylesheets/prove03Style/forms.css">
+    <style>
+        .login-form{
+            width: 20rem;
+            max-width: 90%;
+            margin:auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <% include ../../../partials/prove03/shopnav.ejs %>
+
+    <div class="center">
+        <h1><%= pageTitle %></h1>
+    </div>
+
+    <main>
+        <div class="form-container">
+        <form class="login-form" action="./login" method="POST">
+
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email">
+
+            <label for="password">Password</label>
+            <input type="text" name="password" id="password">
+            
+            
+            <button class="btn" type="submit">Login</button>
+        </form>
+    </div>
+    </main>
+</body>

@@ -28,7 +28,8 @@
                     Price $: <%= element.price %>
                 </h3>
 
-                <a href="/proveRoutes/prove03Routes/prove03R/edit-book/<%= element._id %>?edit=true" class="green small button">Edit</a>
+                <a href="/proveRoutes/prove03Routes/prove03R/edit-book/<%= element._id %>?edit=true"
+                    class="green small button">Edit</a>
 
                 <form action="./delete-book" method="POST">
                     <input type="hidden" value="<%= element._id %>" name="productId">

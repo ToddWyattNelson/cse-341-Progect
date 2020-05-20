@@ -1,17 +1,24 @@
 const Book = require('../../models/prove03Models/bookM')
+const User = require('../../models/prove03Models/user')
+const bcrypt = require('bcryptjs');
 //const books = [];
 
 exports.prove03main = (req, res, next) => {
     res.render('pages/proveAssignments/prove03view/prove03V', {
         Title: "Books",
         path: '/Prove03',
+        isAuthenticated: req.session.isLoggedIn
     });
 }
 
 exports.getAddbook = (req, res, next) => {
+    if(! req.session.isLoggedIn) {
+        return res.redirect('/proveRoutes/prove03Routes/prove03R/login');
+    }
     res.render('pages/proveAssignments/prove03view/add-book', {
         Title: "Add book",
-        path: '/Prove03'
+        path: '/Prove03',
+        isAuthenticated: req.session.isLoggedIn
     });
 }
 
@@ -22,7 +29,7 @@ exports.addingBook = (req, res, next) => {
         price: req.body.price,
         description: req.body.description,
         genre: req.body.genre,
-        userId: req.user._id
+        userId: req.user
     });
     book.save()
         .then(result => {
@@ -43,7 +50,8 @@ exports.getBookDetails = (req, res, next) => {
             res.render('pages/proveAssignments/prove03view/book-details', {
                 Title: "Book Details",
                 path: '/Prove03',
-                books: books
+                books: books,
+                isAuthenticated: req.session.isLoggedIn
             });
         });
 
@@ -56,7 +64,8 @@ exports.readBook = (req, res, next) => {
             res.render('pages/proveAssignments/prove03view/single-book-detail', {
                 Title: "Single Book",
                 path: '/Prove03',
-                book: book
+                book: book,
+                isAuthenticated: req.session.isLoggedIn
             });
 
         })
@@ -71,7 +80,8 @@ exports.getadminTools = (req, res, next) => {
             res.render('pages/proveAssignments/prove03view/admin-tools', {
                 Title: "Admin Tools",
                 path: '/Prove03',
-                books: books
+                books: books,
+                isAuthenticated: req.session.isLoggedIn
             });
         })
 
@@ -92,7 +102,8 @@ exports.adminEditBook = (req, res, next) => {
                 Title: "Admin Tools",
                 path: '/Prove03',
                 editing: editMode,
-                book: book
+                book: book,
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => console.log(err));
@@ -142,7 +153,8 @@ exports.getCart = (req, res, next) => {
             res.render('pages/proveAssignments/prove03view/cart', {
                 path: '/cart',
                 pageTitle: 'Your Cart',
-                books: books
+                books: books,
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => console.log(err));
@@ -172,3 +184,87 @@ exports.postDeleteItemFormCart = (req, res, next) => {
         })
         .catch(err => console.log(err));
 };
+
+
+//LOGIN & LOGOUT
+exports.getLogin = (req, res, next) => {
+    res.render('pages/proveAssignments/prove03view/login', {
+        path: "/login",
+        pageTitle: "Login",
+        isAuthenticated: false
+    });
+}
+
+exports.postLogin = (req, res, next) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    User.findOne({ email: email })
+        .then(user => {
+            if (!user) {
+                return res.redirect('/proveRoutes/prove03Routes/prove03R/login');
+            }
+            bcrypt
+                .compare(password, user.password)
+                .then(doMatch => {
+                    if (doMatch) {
+                        req.session.isLoggedIn = true;
+                        req.session.user = user;
+                        return req.session.save(err => {
+                            console.log(err);
+                            res.redirect('/proveRoutes/prove03Routes/prove03R');
+                        });
+
+                    }
+                    res.redirect('/proveRoutes/prove03Routes/prove03R/login');
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.redirect("/proveRoutes/prove03Routes/prove03R/login");
+                });
+
+
+        })
+        .catch(err => console.log(err));
+};
+
+exports.postlogout = (req, res, next) => {
+    req.session.destroy(err => {
+        console.log(err);
+        res.redirect('/proveRoutes/prove03Routes/prove03R');
+    });
+};
+
+exports.getSignup = (req, res, next) => {
+    res.render('pages/proveAssignments/prove03view/signup', {
+        path: '/signup',
+        pageTitle: "Signup",
+        isAuthenticated: false
+    });
+};
+
+exports.postSignup = (req, res, next) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+    User.findOne({ email: email })
+        .then(userDoc => {
+            if (userDoc) {
+                return res.redirect('./signup');
+            }
+            return bcrypt.hash(password, 12)
+                .then(hashedPassword => {
+                    const user = new User({
+                        email: email,
+                        password: hashedPassword,
+                        cart: { items: [] }
+                    });
+                    return user.save();
+                })
+                .then(result => {
+                    res.redirect('/proveRoutes/prove03Routes/prove03R/login')
+                });
+        })
+        .catch(err => { console.log(err) });
+
+};
+
