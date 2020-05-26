@@ -19,20 +19,23 @@
 
 <body>
     <% include ../../../partials/prove03/shopnav.ejs %>
+    <% if (errorMessage) { %>
+        <div class="user-message user-message--error"><%= errorMessage %></div>
+    <% } %>
     <div class="form-container">
-        <form class="login-form" action="./signup" method="POST">
+        <form class="login-form" action="./signup" method="POST" novalidate>
             <!-- <input type="text" name="_csrf" value=""> -->
 
             <label for="email">E-Mail</label>
-            <input type="email" name="email" id="email">
+            <input type="email" name="email" id="email" value="<%= oldInput.email %>">
 
 
             <label for="password">Password</label>
-            <input type="password" name="password" id="password">
+            <input type="password" name="password" id="password" value="<%= oldInput.password %>">
 
 
             <label for="confirmPassword">Confirm Password</label>
-            <input type="password" name="confirmPassword" id="confirmPassword">
+            <input type="password" name="confirmPassword" id="confirmPassword" value="<%= oldInput.confirmPassword %>">
 
 
             <button class="btn" type="submit">Signup</button>

@@ -1,10 +1,11 @@
 const Book = require('../../models/prove03Models/bookM')
 const User = require('../../models/prove03Models/user')
 const bcrypt = require('bcryptjs');
-//const books = [];
+const { validationResult } = require('express-validator/check');
 
 exports.prove03main = (req, res, next) => {
     res.render('pages/proveAssignments/prove03view/prove03V', {
+        pageTitle: "Books",
         Title: "Books",
         path: '/Prove03',
         isAuthenticated: req.session.isLoggedIn
@@ -12,17 +13,52 @@ exports.prove03main = (req, res, next) => {
 }
 
 exports.getAddbook = (req, res, next) => {
-    if(! req.session.isLoggedIn) {
+    if (!req.session.isLoggedIn) {
         return res.redirect('/proveRoutes/prove03Routes/prove03R/login');
     }
     res.render('pages/proveAssignments/prove03view/add-book', {
+        pageTitle: "Add Book",
         Title: "Add book",
         path: '/Prove03',
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
+        editing: false,
+        hasError: false,
+        errorMessage: null,
+        validationErrors: []
     });
 }
 
 exports.addingBook = (req, res, next) => {
+   
+
+    const title = req.body.title;
+    const imageUrl = req.body.imageUrl;
+    const price = req.body.price;
+    const genre = req.body.genre;
+    const description = req.body.description;
+    const errors = validationResult(req);
+    
+
+    if (!errors.isEmpty()) {
+        console.log(errors.array());
+        return res.status(422).render('pages/proveAssignments/prove03view/add-book', {
+            pageTitle: "Add Book",
+            Title: "Add book",
+            path: '/add-book',
+            editing: false,
+            hasError: true,
+            isAuthenticated: req.session.isLoggedIn,
+            book: {
+                title: title,
+                imageUrl: imageUrl,
+                price: price,
+                genre: genre,
+                description: description
+            },
+            errorMessage: errors.array()[0].msg,
+            validationErrors: errors.array()
+        });
+    }
     const book = new Book({
         title: req.body.title,
         imageUrl: req.body.imageUrl,
@@ -35,12 +71,13 @@ exports.addingBook = (req, res, next) => {
         .then(result => {
             // console.log(result);
             console.log('Created Book');
+            res.redirect('./');
         })
         .catch(err => {
             console.log(err);
         });
     console.log(book);
-    res.redirect('./');
+    
 }
 
 exports.getBookDetails = (req, res, next) => {
@@ -48,6 +85,7 @@ exports.getBookDetails = (req, res, next) => {
         .then(books => {
             console.log(books)
             res.render('pages/proveAssignments/prove03view/book-details', {
+                pageTitle: "Book Details",
                 Title: "Book Details",
                 path: '/Prove03',
                 books: books,
@@ -62,6 +100,7 @@ exports.readBook = (req, res, next) => {
     Book.findById(id)
         .then((book) => {
             res.render('pages/proveAssignments/prove03view/single-book-detail', {
+                pageTitle: "About " + book.title,
                 Title: "Single Book",
                 path: '/Prove03',
                 book: book,
@@ -78,6 +117,7 @@ exports.getadminTools = (req, res, next) => {
         .then(books => {
             console.log(books)
             res.render('pages/proveAssignments/prove03view/admin-tools', {
+                pageTitle: "Admin Tools",
                 Title: "Admin Tools",
                 path: '/Prove03',
                 books: books,
@@ -99,11 +139,15 @@ exports.adminEditBook = (req, res, next) => {
                 return res.redirect('./');
             }
             res.render('pages/proveAssignments/prove03view/edit-book', {
+                pageTitle: "Admin Tools",
                 Title: "Admin Tools",
                 path: '/Prove03',
                 editing: editMode,
                 book: book,
-                isAuthenticated: req.session.isLoggedIn
+                isAuthenticated: req.session.isLoggedIn,
+                hasError: false,
+                errorMessage: null,
+                validationErrors: []
             });
         })
         .catch(err => console.log(err));
@@ -114,8 +158,33 @@ exports.postEditBook = (req, res, next) => {
     const updatedTitle = req.body.title;
     const updatedImageUrl = req.body.imageUrl;
     const updatedPrice = req.body.price;
+    const updatedGenre = req.body.genre;
     const updatedDesc = req.body.description;
     const prodId = req.body.productId;
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(422).render('pages/proveAssignments/prove03view/edit-book', {
+            pageTitle: "Edit Book",
+            Title: "Edit Book",
+            path: '/edit-book',
+            editing: true,
+            isAuthenticated: req.session.isLoggedIn,
+            hasError: true,
+            book: {
+                title: updatedTitle,
+                imageUrl: updatedImageUrl,
+                price: updatedPrice,
+                genre: updatedGenre,
+                description: updatedDesc,
+                _id: prodId
+            },
+            errorMessage: errors.array()[0].msg,
+            validationErrors: errors.array()
+        });
+    }
+
     Book.findById(prodId)
         .then(book => {
             book.title = updatedTitle;
@@ -188,20 +257,58 @@ exports.postDeleteItemFormCart = (req, res, next) => {
 
 //LOGIN & LOGOUT
 exports.getLogin = (req, res, next) => {
+    let message = req.flash('error');
+    if (message.length > 0) {
+        message = message[0];
+    } else {
+        message = null;
+    }
     res.render('pages/proveAssignments/prove03view/login', {
         path: "/login",
         pageTitle: "Login",
-        isAuthenticated: false
+        isAuthenticated: false,
+        errorMessage: message,
+        oldInput: {
+            email: '',
+            password: ''
+        },
+        validationErrors: []
     });
 }
+
 
 exports.postLogin = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422)
+            .render('pages/proveAssignments/prove03view/login', {
+                path: '/login',
+                pageTitle: "Login",
+                isAuthenticated: false,
+                errorMessage: errors.array()[0].msg,
+                oldInput: {
+                    email: email,
+                    password: password
+                },
+                validationErrors: errors.array()
+            });
+    }
     User.findOne({ email: email })
         .then(user => {
             if (!user) {
-                return res.redirect('/proveRoutes/prove03Routes/prove03R/login');
+                return res.status(422).render('pages/proveAssignments/prove03view/login', {
+                    path: '/login',
+                    pageTitle: 'Login',
+                    errorMessage: 'Invalid email or password.',
+                    isAuthenticated: req.session.isLoggedIn,
+                    oldInput: {
+                        email: email,
+                        password: password
+                    },
+                    validationErrors: []
+                });
             }
             bcrypt
                 .compare(password, user.password)
@@ -215,6 +322,7 @@ exports.postLogin = (req, res, next) => {
                         });
 
                     }
+                    req.flash("error", 'Please Enter a valid email or password');
                     res.redirect('/proveRoutes/prove03Routes/prove03R/login');
                 })
                 .catch(err => {
@@ -226,7 +334,7 @@ exports.postLogin = (req, res, next) => {
         })
         .catch(err => console.log(err));
 };
-
+// uses flash to pass the errors
 exports.postlogout = (req, res, next) => {
     req.session.destroy(err => {
         console.log(err);
@@ -234,37 +342,68 @@ exports.postlogout = (req, res, next) => {
     });
 };
 
+//uses validation
 exports.getSignup = (req, res, next) => {
+    let message = req.flash('error');
+    if (message.length > 0) {
+        message = message[0];
+    } else {
+        message = null;
+    }
     res.render('pages/proveAssignments/prove03view/signup', {
         path: '/signup',
         pageTitle: "Signup",
-        isAuthenticated: false
+        isAuthenticated: false,
+        errorMessage: message,
+        oldInput: {
+            email: '',
+            password: '',
+            confirmPassword: ''
+        }
     });
 };
-
+//uses validation
 exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
-    User.findOne({ email: email })
-        .then(userDoc => {
-            if (userDoc) {
-                return res.redirect('./signup');
-            }
-            return bcrypt.hash(password, 12)
-                .then(hashedPassword => {
-                    const user = new User({
-                        email: email,
-                        password: hashedPassword,
-                        cart: { items: [] }
-                    });
-                    return user.save();
-                })
-                .then(result => {
-                    res.redirect('/proveRoutes/prove03Routes/prove03R/login')
-                });
-        })
-        .catch(err => { console.log(err) });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422)
+            .render('pages/proveAssignments/prove03view/signup', {
+                path: '/signup',
+                pageTitle: "Signup",
+                isAuthenticated: false,
+                errorMessage: errors.array()[0].msg,
+                oldInput: {
+                    email: email,
+                    password: password,
+                    confirmPassword: req.body.confirmPassword
+                }
+            });
+    }
 
+    bcrypt.hash(password, 12)
+        .then(hashedPassword => {
+            const user = new User({
+                email: email,
+                password: hashedPassword,
+                cart: { items: [] }
+            });
+            return user.save();
+        })
+        .then(result => {
+            res.redirect('/proveRoutes/prove03Routes/prove03R/login')
+        })
+        .catch(err => {
+            console.log(err)
+        });
 };
 
+exports.getPassRest = (req, res, next) => {
+    res.render('pages/proveAssignments/prove03view/passReset', {
+        path: '/passReset',
+        pageTitle: 'Reset Password',
+
+        isAuthenticated: req.session.isLoggedIn
+    });
+};

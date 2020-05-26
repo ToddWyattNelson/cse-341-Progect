@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const path = require('path');
 const routes = require('./routes');
 const cors = require('cors'); // Place this with other requires (like 'path' and 'express')
+const flash = require('connect-flash');
 
 const MongoDBStore = require('connect-mongodb-session')(session);
 const User = require("./models/prove03Models/user");
@@ -31,6 +32,8 @@ app.use(
     store: shop
   })
 );
+
+app.use(flash());
 
 // app.use(csrfPortection);
 

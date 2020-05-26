@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../../../partials/prove03/shopnavStyle.ejs %>
+    <link rel="stylesheet" href="/stylesheets/prove03Style/forms.css">
+    <style>
+        .reset-form{
+            width: 20rem;
+            max-width: 90%;
+            margin:auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <% include ../../../partials/prove03/shopnav.ejs %>
+
+    <div class="center">
+        <h1><%= pageTitle %></h1>
+    </div>
+
+    <main>
+        <div class="form-container">
+        <form class="reset-form" action="./login" method="POST">
+
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email">       
+            
+            <button class="btn" type="submit">Reset Password</button>
+        </form>
+    </div>
+    </main>
+</body>

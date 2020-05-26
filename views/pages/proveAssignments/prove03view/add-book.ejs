@@ -12,27 +12,30 @@
     <div class="center">
         <h1><%= Title %></h1>
     </div>
+    <% if (errorMessage) { %>
+        <div class="user-message user-message--error"><%= errorMessage %></div>
+    <% } %>
 
     <main>
         <div class="form-container">
         <form class="form" action="./adding-book" method="POST">
 
             <label for="title">Title</label>
-            <input type="text" name="title" id="title">
+            <input type="text" name="title" id="title" value="<% if (editing || hasError) { %><%= book.title %><% } %>">
 
 
             <label for="imageUrl">Image URL</label>
-            <input type="text" name="imageUrl" id="imageUrl">
+            <input type="text" name="imageUrl" id="imageUrl" value="<% if (editing || hasError) { %><%= book.imageUrl %><% } %>">
 
             <label for="genre">Genre</label>
-            <input type="text" name="genre" id="genre">
+            <input type="text" name="genre" id="genre" value="<% if (editing || hasError) { %><%= book.genre %><% } %>">
 
 
             <label for="price">Price</label>
-            <input type="number" name="price" id="price" step="0.01">
+            <input type="number" name="price" id="price" step="0.01" value="<% if (editing || hasError) { %><%= book.value %><% } %>">
 
             <label for="description">Description</label>
-            <textarea name="description" id="description" rows="5"></textarea>
+            <textarea name="description" id="description" rows="5" ><% if (editing || hasError) { %><%= book.title %><% } %></textarea>
 
             
             <button class="btn" type="submit">Add Product</button>

@@ -15,8 +15,10 @@
     <!-- Title -->
     <h1><%= pageTitle %></h1>
     <!-- Return Button -->
-    <a class="customButton" href="../prove03R" class="red small button "><button
-            class="red small button ">Return</button></a>
+    <div class="itme">
+        <a class="customButton" href="../prove03R" class="red small button "><button
+                class="red small button ">Return</button></a>
+    </div>
 
     <!-- items -->
     <% if (books.length > 0) { %>
@@ -26,7 +28,7 @@
     <div class="item">
         <!-- Display info of book -->
         <h1>Title: <%= book.title %></h1>
-        <img src="<%= book.imageUrl %>" alt="" class="img-thumbnail img-fluid">
+        <img src="<%= book.imageUrl %>" alt="" class="img-book">
         <!-- Display Quantity-->
         <h2>Quantity: <%=  book.quantity %></h2>
         <!-- Delete Item from cart -->
@@ -41,7 +43,7 @@
 
 
     <div>
-        <form action="/create-order" method="POST">
+        <form action="/create-order" method="POST" class="item">
             <button type="submit" class="large green button">Order Now!</button>
         </form>
     </div>

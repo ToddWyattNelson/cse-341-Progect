@@ -21,6 +21,10 @@ body {
     
 }
 
+.centered {
+    text-align: center;
+  }
+  
 .main {
     width: 100%;
     padding-top: 1vw;
@@ -64,3 +68,19 @@ body {
     color: white;
     cursor: pointer;
 }
+
+.user-message {
+    margin: auto;
+    width: 50%;
+    border: 1px solid #4771fa;
+    padding: 0.5rem;
+    border-radius: 3px;
+    background: #b9c9ff;
+    text-align: center;
+  }
+  
+  .user-message--error {
+    border-color: red;
+    background: rgb(255, 176, 176);
+    color: red;
+  }
