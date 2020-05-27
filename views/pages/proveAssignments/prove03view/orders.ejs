@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %> </title>
+    <% include ../../../partials/prove03/shopnavStyle.ejs %>
+    <link rel="stylesheet" href="/stylesheets/prove03Style/buttons.css">
+    <link rel="stylesheet" href="/stylesheets/prove03Style/cart.css">
+</head>
+
+<body>
+    <% include ../../../partials/prove03/shopnav.ejs %>
+    <!-- Title -->
+    <h1><%= pageTitle %></h1>
+    <!-- Return Button -->
+    <div class="itme">
+        <a class="customButton" href="../prove03R" class="red small button "><button
+                class="red small button ">Return</button></a>
+    </div>
+
+    <!-- items -->
+    <main>
+        <% if (orders.length <= 0) { %>
+        <h1>Nothing there!</h1>
+        <% } else { %>
+        <ul>
+            <% orders.forEach(order => { %>
+            <li>
+                <h1>Order - # <%= order._id %></h1>
+                <ul>
+                    <% order.books.forEach(b => { %>
+                    <li> b.book.title has problem (<%= b.quantity %>)</li>
+                    <% }); %>
+                </ul>
+            </li>
+            <% }); %>
+        </ul>
+        <% } %>
+    </main>
+
+</body>

@@ -65,6 +65,11 @@ router.post('/add-to-cart', isAuth, prove03Controller.postAddToCart);
 // delete item from cart
 router.post("/cart-delete-item", isAuth, prove03Controller.postDeleteItemFormCart);
 
+router.post('/create-order', isAuth, prove03Controller.postOrder);
+
+router.get('/orders', prove03Controller.getOrders);
+
+
 // login page
 router.get("/login", prove03Controller.getLogin);
 
@@ -124,5 +129,13 @@ router.post("/signup",
 
 //reset password
 router.get('/passReset', prove03Controller.getPassRest);
+
+router.post('/passReset', prove03Controller.postReset);
+
+router.get('/passReset/:token', prove03Controller.getNewPassword);
+
+router.post('/new-password', prove03Controller.postNewPassword);
+
+
 
 module.exports = router;

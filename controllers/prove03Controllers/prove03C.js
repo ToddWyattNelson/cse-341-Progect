@@ -1,7 +1,17 @@
-const Book = require('../../models/prove03Models/bookM')
-const User = require('../../models/prove03Models/user')
+const crypto = require('crypto');
+const Book = require('../../models/prove03Models/bookM');
+const User = require('../../models/prove03Models/user');
+const Order = require('../../models/prove03Models/order')
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require("nodemailer-sendgrid-transport");
 const { validationResult } = require('express-validator/check');
+
+const transporter = nodemailer.createTransport(sendgridTransport({
+    auth: {
+        api_key: "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"
+    }
+}));
 
 exports.prove03main = (req, res, next) => {
     res.render('pages/proveAssignments/prove03view/prove03V', {
@@ -29,7 +39,7 @@ exports.getAddbook = (req, res, next) => {
 }
 
 exports.addingBook = (req, res, next) => {
-   
+
 
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
@@ -37,7 +47,7 @@ exports.addingBook = (req, res, next) => {
     const genre = req.body.genre;
     const description = req.body.description;
     const errors = validationResult(req);
-    
+
 
     if (!errors.isEmpty()) {
         console.log(errors.array());
@@ -77,7 +87,7 @@ exports.addingBook = (req, res, next) => {
             console.log(err);
         });
     console.log(book);
-    
+
 }
 
 exports.getBookDetails = (req, res, next) => {
@@ -255,6 +265,49 @@ exports.postDeleteItemFormCart = (req, res, next) => {
 };
 
 
+exports.postOrder = (req, res, next) => {
+    req.user
+        .populate('cart.items.productId')
+        .execPopulate()
+        .then(user => {
+            // console.log(user.cart);
+            const books = user.cart.items.map(i => {
+                return { quantity: i.quantity, book: { ...i.bookId._doc } };
+            });
+
+            const order = new Order({
+                user: {
+                    email: req.user.email,
+                    userId: req.user
+                },
+                books: books,
+
+            });
+            return order.save();
+        })
+        .then(result => {
+            return req.user.clearCart();
+        })
+        .then(() => {
+            res.redirect("/proveRoutes/prove03Routes/prove03R");
+        })
+        .catch(err => console.log(err));
+};
+
+exports.getOrders = (req, res, next) => {
+    Order.find({ 'user.userId': req.user._id })
+        .then(orders => {
+            res.render('pages/proveAssignments/prove03view/orders', {
+                path: '/orders',
+                isAuthenticated: req.session.isLoggedIn,
+                pageTitle: 'Your Orders',
+                orders: orders
+            });
+        })
+        .catch(err => console.log(err));
+};
+
+
 //LOGIN & LOGOUT
 exports.getLogin = (req, res, next) => {
     let message = req.flash('error');
@@ -392,18 +445,120 @@ exports.postSignup = (req, res, next) => {
             return user.save();
         })
         .then(result => {
-            res.redirect('/proveRoutes/prove03Routes/prove03R/login')
+            res.redirect('/proveRoutes/prove03Routes/prove03R/login');
+            return transporter.sendMail({
+                to: email,
+                from: "tstnlsn@gmail.com",
+                subject: "Signup Succeeded!",
+                html: "<h1> You successfully signed up!</h1>"
+            });
         })
         .catch(err => {
             console.log(err)
         });
+
 };
 
 exports.getPassRest = (req, res, next) => {
-    res.render('pages/proveAssignments/prove03view/passReset', {
+    let message = req.flash('error');
+    if (message.length > 0) {
+        message = message[0];
+    } else {
+        message = null;
+    }
+    res.render('pages/proveAssignments/prove03view/resetpass', {
         path: '/passReset',
         pageTitle: 'Reset Password',
-
+        errorMessage: message,
         isAuthenticated: req.session.isLoggedIn
     });
 };
+
+
+exports.postReset = (req, res, next) => {
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            console.log(err);
+            return res.redirect('/proveRoutes/prove03Routes/prove03R/passReset');
+        }
+        const token = buffer.toString('hex');
+        User.findOne({ email: req.body.email })
+            .then(user => {
+                if (!user) {
+                    req.flash('error', 'No account with that email found.');
+                    return res.redirect('/proveRoutes/prove03Routes/prove03R/passReset');
+                }
+                user.resetToken = token;
+                user.resetTokenExpiration = Date.now() + 3600000;
+                return user.save();
+            })
+            .then(result => {
+                res.redirect('/proveRoutes/prove03Routes/prove03R');
+                transporter.sendMail({
+                    to: req.body.email,
+                    from: 'tstnlsn@gmail.com',
+                    subject: 'Password reset',
+                    html: `
+            <p>You requested a password reset</p>
+            <p>Click this <a href="https://arcane-earth-73349.herokuapp.com/proveRoutes/prove03Routes/prove03R/passReset/${token}">link</a> to set a new password.</p>
+          `
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    });
+};
+
+exports.getNewPassword = (req, res, next) => {
+    const token = req.params.token;
+    User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+        .then(user => {
+            let message = req.flash('error');
+            if (message.length > 0) {
+                message = message[0];
+            } else {
+                message = null;
+            }
+            res.render('pages/proveAssignments/prove03view/newPassword', {
+                path: '/new-password',
+                pageTitle: 'New Password',
+                errorMessage: message,
+                isAuthenticated: req.session.isLoggedIn,
+                userId: user._id.toString(),
+                passwordToken: token
+            });
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+exports.postNewPassword = (req, res, next) => {
+    const newPassword = req.body.password;
+    const userId = req.body.userId;
+    const passwordToken = req.body.passwordToken;
+    let resetUser;
+  
+    User.findOne({
+      resetToken: passwordToken,
+      resetTokenExpiration: { $gt: Date.now() },
+      _id: userId
+    })
+      .then(user => {
+        resetUser = user;
+        return bcrypt.hash(newPassword, 12);
+      })
+      .then(hashedPassword => {
+        resetUser.password = hashedPassword;
+        resetUser.resetToken = undefined;
+        resetUser.resetTokenExpiration = undefined;
+        return resetUser.save();
+      })
+      .then(result => {
+        res.redirect('/proveRoutes/prove03Routes/prove03R/login');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
