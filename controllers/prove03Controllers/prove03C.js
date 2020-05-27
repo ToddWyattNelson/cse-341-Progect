@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const Book = require('../../models/prove03Models/bookM');
+const Book = require('../../models/prove03Models/book');
 const User = require('../../models/prove03Models/user');
 const Order = require('../../models/prove03Models/order')
 const bcrypt = require('bcryptjs');
@@ -93,7 +93,7 @@ exports.addingBook = (req, res, next) => {
 exports.getBookDetails = (req, res, next) => {
     Book.find()
         .then(books => {
-            console.log(books)
+            console.log("these are the books:" + books)
             res.render('pages/proveAssignments/prove03view/book-details', {
                 pageTitle: "Book Details",
                 Title: "Book Details",
@@ -225,7 +225,7 @@ exports.postDeleteProduct = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
     req.user
-        .populate('cart.items.productId')
+        .populate('cart.items.bookId')
         .execPopulate()
         .then(user => {
             const books = user.cart.items;
@@ -242,9 +242,10 @@ exports.getCart = (req, res, next) => {
 exports.postAddToCart = (req, res, next) => {
 
     const bookId = req.body.bookId;
+    //works to here
     Book.findById(bookId)
         .then(book => {
-            return req.user.addToCart(book);
+            return req.user.addToCart(book); // this works
         })
         .then(result => {
             console.log(result);
@@ -267,20 +268,21 @@ exports.postDeleteItemFormCart = (req, res, next) => {
 
 exports.postOrder = (req, res, next) => {
     req.user
-        .populate('cart.items.productId')
+        .populate('cart.items.bookId')
         .execPopulate()
         .then(user => {
-            // console.log(user.cart);
+            console.log(user.cart.items);
             const books = user.cart.items.map(i => {
+                console.log("trying to populate: " + i.bookId._doc);
                 return { quantity: i.quantity, book: { ...i.bookId._doc } };
             });
-
+            console.log("hello world" + books)
             const order = new Order({
                 user: {
                     email: req.user.email,
                     userId: req.user
                 },
-                books: books,
+                books: books
 
             });
             return order.save();

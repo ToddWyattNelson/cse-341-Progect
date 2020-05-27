@@ -21,14 +21,14 @@ const userSchema = new Schema({
           ref: 'Book',
           required: true
         },
-        title: {
-          type: String,
-          required: true
-        },
-        imageUrl: {
-          type: String,
-          required: true
-        },
+        // title: {
+        //   type: String,
+        //   required: true
+        // },
+        // imageUrl: {
+        //   type: String,
+        //   required: true
+        // },
         quantity: { type: Number, required: true }
       }
     ]
@@ -41,21 +41,27 @@ userSchema.methods.addToCart = function (book) {
   });
   let newQuantity = 1;
   const updatedCartItems = [...this.cart.items];
+  
 
+  
   if (cartbookIndex >= 0) {
     newQuantity = this.cart.items[cartbookIndex].quantity + 1;
     updatedCartItems[cartbookIndex].quantity = newQuantity;
   } else {
     updatedCartItems.push({
-      imageUrl: book.imageUrl,
-      title: book.title,
+      // imageUrl: book.imageUrl,
+      // title: book.title,
       bookId: book._id,
       quantity: newQuantity
     });
+    
   }
+  console.log("updatedCartItems: " + updatedCartItems);
   const updatedCart = {
     items: updatedCartItems
   };
+
+  console.log("updatedCart: " + updatedCart);
   this.cart = updatedCart;
   return this.save();
 };

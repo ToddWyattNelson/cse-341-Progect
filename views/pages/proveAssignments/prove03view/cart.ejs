@@ -27,8 +27,9 @@
 
     <div class="item">
         <!-- Display info of book -->
-        <h1>Title: <%= book.title %></h1>
-        <img src="<%= book.imageUrl %>" alt="" class="img-book">
+        <h1>Title: <%= book.bookId.title %></h1>
+        
+        <img src="<%= book.bookId.imageUrl %>" alt="" class="img-book">
         <!-- Display Quantity-->
         <h2>Quantity: <%=  book.quantity %></h2>
         <!-- Delete Item from cart -->
